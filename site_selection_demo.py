@@ -14,8 +14,6 @@ from st_aggrid import AgGrid, GridOptionsBuilder, ColumnsAutoSizeMode
 import geopandas as gpd
 import leafmap.colormaps as cm
 from leafmap.common import hex_to_rgb
-from streamlit_extras.switch_page_button import switch_page
-import pyautogui
 
 # STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
 # # We create a downloads directory within the streamlit static asset directory
@@ -187,15 +185,7 @@ def ColourWidgetText(wgt_txt, wch_colour = '#000000'):
     htmlstr = htmlstr.replace('|wgt_txt|', "'" + wgt_txt + "'")
     components.html(f"{htmlstr}", height=0, width=0)
 
-# if 'count' not in st.session_state:
-# 	st.session_state.count = 0
-        
-
-
-
 def app():
-    # perhaps use plotly
-    #print(st.session_state.count)
     st.set_page_config(
         page_title="Granger + SVN Demo", layout="wide"
     )
@@ -311,11 +301,6 @@ def app():
         # color_exp = f"[({selected_col}-{min_value})/({max_value}-{min_value})*255, 0, 0]"
         color_exp = f"[R, G, B]"
 
-        def switch():
-            print("dupa")
-            # st.session_state.count +=1
-            # if st.session_state.count==2:
-            #     switch_page("test")
         geojson = pdk.Layer(
             "GeoJsonLayer",
             gdf,
@@ -332,10 +317,8 @@ def app():
             get_line_color=[0, 0, 0],
             get_line_width=2,
             line_width_min_pixels=1,
-            on_click=print("dupa")
         )
 
-        #print(st.session_state.count)
 
         geojson_null = pdk.Layer(
             "GeoJsonLayer",
@@ -383,7 +366,7 @@ def app():
                     label=selected_col.replace("_", " ").title(),
                     width=0.2,
                     height=3,
-                    orientation="vertical",
+                   orientation="vertical",
                     vmin=min_value,
                     vmax=max_value,
                     font_size=10,
