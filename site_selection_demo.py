@@ -10,21 +10,9 @@ from plotly import graph_objects as go
 import plotly.figure_factory as ff
 from scipy.stats import skewnorm
 import pydeck as pdk
-from st_aggrid import AgGrid, GridOptionsBuilder, ColumnsAutoSizeMode
 import geopandas as gpd
 import leafmap.colormaps as cm
 from leafmap.common import hex_to_rgb
-
-# STREAMLIT_STATIC_PATH = pathlib.Path(st.__path__[0]) / "static"
-# # We create a downloads directory within the streamlit static asset directory
-# # and we write output files to it
-# DOWNLOADS_PATH = STREAMLIT_STATIC_PATH / "downloads"
-# if not DOWNLOADS_PATH.is_dir():
-#     DOWNLOADS_PATH.mkdir()
-
-# DOWNLOADS_PATH = STREAMLIT_STATIC_PATH / "downloads"
-# if not DOWNLOADS_PATH.is_dir():
-#     DOWNLOADS_PATH.mkdir()
 
 link_prefix = "https://raw.githubusercontent.com/giswqs/data/main/housing/"
 
@@ -229,12 +217,12 @@ def app():
         else:
             inventory_df = inventory_df.iloc[:, :3]
         
-        inventory_df['IRR'] = np.random.randint(-10, 55, inventory_df.shape[0])
+        inventory_df['IRR'] = np.random.randint(0, 55, inventory_df.shape[0])
         inventory_df['Demographic Score'] = np.random.randint(0, 100, inventory_df.shape[0])
         inventory_df['Location Score'] = np.random.randint(0, 100, inventory_df.shape[0])
         inventory_df['Financial Score'] = np.random.randint(0, 100, inventory_df.shape[0])
         inventory_df['Overall Score'] = (inventory_df["Demographic Score"]+inventory_df["Financial Score"]+inventory_df["Location Score"])/3
-        inventory_df["Average Price Per Square Foot"] = random.randrange(30, 240)
+        inventory_df["Average Price Per Square Foot"] = [random.randrange(15, 240) for i in range(inventory_df.shape[0])]
 
         selected_period = get_periods(inventory_df)[0]
 
@@ -287,11 +275,11 @@ def app():
         initial_view_state = pdk.ViewState(
             latitude=40,
             longitude=-100,
-            zoom=3,
+            zoom=3.5,
             max_zoom=16,
             pitch=0,
             bearing=0,
-            height=900,
+            height=700,
             width=None,
         )
 
@@ -360,28 +348,37 @@ def app():
         with row3_col1:
             st.pydeck_chart(r)
         with row3_col2:
+            st.write("")
+            st.write("")
+            st.write("")
+            st.write("")
+            st.write("")
+            st.write("")
+            st.write("")
+            st.write("")
+            st.write("")
             st.write(
                 cm.create_colormap(
                     palette,
                     label=selected_col.replace("_", " ").title(),
-                    width=0.2,
-                    height=3,
+                    width=0.15,
+                    height=1.5,
                    orientation="vertical",
                     vmin=min_value,
                     vmax=max_value,
-                    font_size=10,
+                    font_size=5,
                 )
             )
-        row4_col1, row4_col2, row4_col3 = st.columns([1, 2, 3])
+        row4_col1, row4_col2 = st.columns([1, 2])
         with row4_col1:
             show_data = st.checkbox("Show raw data")
-        with row4_col2:
-            show_cols = st.multiselect("Select columns", data_cols)
         if show_data:
+            with row4_col2:
+                show_cols = st.multiselect("Select columns", data_cols, default=["IRR", "Demographic Score", "Location Score", "Financial Score", "Overall Score", "Average Price Per Square Foot"])
             if scale == "State":
-                st.dataframe(gdf[["NAME", "STUSPS"] + show_cols])
+                st.dataframe(gdf[["NAME", "STUSPS"] + show_cols].sample(frac=1))
             elif scale == "County":
-                st.dataframe(gdf[["NAME", "STATEFP", "COUNTYFP"] + show_cols])
+                st.dataframe(gdf[["NAME", "STATEFP", "COUNTYFP"] + show_cols].sample(frac=1))
 
 
     with DETAILS_TAB:
