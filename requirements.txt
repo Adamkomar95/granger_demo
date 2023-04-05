@@ -1,0 +1,9 @@
+streamlit
+pydeck
+plotly
+streamlit-aggrid
+openpyxl
+scipy
+geopandas
+leafmap
+pyogrio
