@@ -232,8 +232,8 @@ def app():
             selected_col = st.selectbox("Attribute", data_cols)
 
 
-        row2_col1, row2_col2, row2_col3, row2_col4 = st.columns(
-            [0.6, 0.68, 0.7, 0.7]
+        row2_col1, row2_col2 = st.columns(
+            [0.6, 0.68]
         )
 
         palettes = cm.list_colormaps()
@@ -246,15 +246,15 @@ def app():
             show_nodata = st.checkbox("Show nodata areas", value=True)
         with row2_col2:
             show_3d = st.checkbox("Show 3D view", value=False)
-        with row2_col3:
-            if show_3d:
-                elev_scale = st.slider(
-                    "Elevation scale", min_value=1, max_value=10000, value=1, step=10
-                )
-                with row2_col4:
-                    st.info("Press Ctrl and move the left mouse button.")
-            else:
-                elev_scale = 1
+        # with row2_col3:
+        #     if show_3d:
+        #         elev_scale = st.slider(
+        #             "Elevation scale", min_value=1, max_value=10000, value=1, step=10
+        #         )
+        #         with row2_col4:
+        #             st.info("Press Ctrl and move the left mouse button.")
+        #     else:
+        #         elev_scale = 1
 
         gdf = join_attributes(gdf, inventory_df, scale.lower())
         gdf_null = select_null(gdf, selected_col)
@@ -299,7 +299,7 @@ def app():
             extruded=show_3d,
             wireframe=True,
             get_elevation=f"{selected_col}",
-            elevation_scale=elev_scale,
+            elevation_scale=200,
             # get_fill_color="color",
             get_fill_color=color_exp,
             get_line_color=[0, 0, 0],
