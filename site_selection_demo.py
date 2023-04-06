@@ -361,12 +361,12 @@ def app():
                 cm.create_colormap(
                     palette,
                     label=selected_col.replace("_", " ").title(),
-                    width=0.15,
-                    height=1.5,
+                    width=0.05,
+                    height=1,
                    orientation="vertical",
                     vmin=min_value,
                     vmax=max_value,
-                    font_size=5,
+                    font_size=4,
                 )
             )
         row4_col1, row4_col2 = st.columns([1, 2])
